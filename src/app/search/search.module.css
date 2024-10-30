@@ -1,0 +1,34 @@
+.searchPage {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .searchForm {
+    margin: 20px 0;
+  }
+  
+  .searchInput {
+    padding: 10px;
+    font-size: 16px;
+    width: 300px;
+  }
+  
+  .searchButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #c391ec;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .error {
+    color: red;
+    margin-top: 10px;
+  }
+  
+  .resultContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
