@@ -4,22 +4,15 @@ import { createContext, useContext, useState } from "react";
 const PokemonContext = createContext();
 
 export function PokemonProvider({ children }) {
-  async function searchPokemon(name) {
-    try {
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
-      if (!response.ok) {
-        throw new Error('Pokemon not found');
-      }
-      const data = await response.json();
-      return getPokemonQuickInfo(data);
-    } catch (error) {
-      console.error('Error searching for Pokemon:', error);
-      return null;
-    }
-  }
   const [pokemonState, setPokemonState] = useState({
     totalPokemonCount: 0,
     randomPokemon: [],
+  });
+
+  const [categories, setCategories] = useState({
+    eggGroups: [],
+    habitats: [],
+    pokemonByCategory: {},
   });
 
   async function getNumberOfPokemon() {
@@ -68,12 +61,119 @@ export function PokemonProvider({ children }) {
     };
   }
 
+  async function searchPokemon(searchTerm) {
+    try {
+      // Search by name
+      const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${searchTerm.toLowerCase()}`);
+      if (pokemonResponse.ok) {
+        const pokemonData = await pokemonResponse.json();
+        return {
+          type: 'pokemon',
+          result: [getPokemonQuickInfo(pokemonData)]
+        };
+      }
+
+      // Search by egg group
+      const eggGroupResponse = await fetch(`https://pokeapi.co/api/v2/egg-group/${searchTerm.toLowerCase()}`);
+      if (eggGroupResponse.ok) {
+        const eggGroupData = await eggGroupResponse.json();
+        const pokemonList = await Promise.all(
+          eggGroupData.pokemon_species.slice(0, 10).map(async (species) => {
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${species.name}`);
+            return response.json();
+          })
+        );
+        return {
+          type: 'egg-group',
+          result: pokemonList.map(pokemon => getPokemonQuickInfo(pokemon))
+        };
+      }
+
+      // Search by habitat
+      const habitatResponse = await fetch(`https://pokeapi.co/api/v2/pokemon-habitat/${searchTerm.toLowerCase()}`);
+      if (habitatResponse.ok) {
+        const habitatData = await habitatResponse.json();
+        const pokemonList = await Promise.all(
+          habitatData.pokemon_species.slice(0, 10).map(async (species) => {
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${species.name}`);
+            return response.json();
+          })
+        );
+        return {
+          type: 'habitat',
+          result: pokemonList.map(pokemon => getPokemonQuickInfo(pokemon))
+        };
+      }
+
+      throw new Error('No results found');
+    } catch (error) {
+      console.error('Error searching:', error);
+      return null;
+    }
+  }
+
+  async function getEggGroups() {
+    try {
+      const response = await fetch('https://pokeapi.co/api/v2/egg-group');
+      const data = await response.json();
+      setCategories(prev => ({ ...prev, eggGroups: data.results }));
+      return data.results;
+    } catch (error) {
+      console.error('Error fetching egg groups:', error);
+      return [];
+    }
+  }
+
+  async function getHabitats() {
+    try {
+      const response = await fetch('https://pokeapi.co/api/v2/pokemon-habitat');
+      const data = await response.json();
+      setCategories(prev => ({ ...prev, habitats: data.results }));
+      return data.results;
+    } catch (error) {
+      console.error('Error fetching habitats:', error);
+      return [];
+    }
+  }
+
+  async function getPokemonByCategory(categoryType, categoryName) {
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/${categoryType}/${categoryName}`);
+      const data = await response.json();
+      const pokemonList = await Promise.all(
+        data.pokemon_species.slice(0, 10).map(async (species) => {
+          const pokemonResponse = await fetch(
+            `https://pokeapi.co/api/v2/pokemon/${species.name}`
+          );
+          return pokemonResponse.json();
+        })
+      );
+      
+      const processedPokemon = pokemonList.map(pokemon => getPokemonQuickInfo(pokemon));
+      setCategories(prev => ({
+        ...prev,
+        pokemonByCategory: {
+          ...prev.pokemonByCategory,
+          [`${categoryType}-${categoryName}`]: processedPokemon
+        }
+      }));
+      return processedPokemon;
+    } catch (error) {
+      console.error('Error fetching pokemon by category:', error);
+      return [];
+    }
+  }
+
   const pokemonValues = {
     ...pokemonState,
+    ...categories,
     getNumberOfPokemon,
     getRandomPokemon,
     getPokemonQuickInfo,
     searchPokemon,
+    getEggGroups,
+    getHabitats,
+    getPokemonByCategory,
   };
 
   return (

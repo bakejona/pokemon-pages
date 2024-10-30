@@ -15,26 +15,26 @@ export default function Search() {
     setError('');
     setSearchResult(null);
     if (searchTerm.trim() === '') {
-      setError('Please enter a Pokémon name');
+      setError('Please enter a search term');
       return;
     }
     const result = await searchPokemon(searchTerm);
     if (result) {
       setSearchResult(result);
     } else {
-      setError('Pokémon not found');
+      setError('No results found');
     }
   };
 
   return (
     <main className={styles.searchPage}>
-      <h1>Search for a Pokémon</h1>
+      <h1>Search for Pokémon, Egg Group, or Habitat</h1>
       <form onSubmit={handleSearch} className={styles.searchForm}>
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Enter Pokémon name"
+          placeholder="Enter Pokémon name, Egg Group, or Habitat"
           className={styles.searchInput}
         />
         <button type="submit" className={styles.searchButton}>Search</button>
@@ -42,11 +42,18 @@ export default function Search() {
       {error && <p className={styles.error}>{error}</p>}
       {searchResult && (
         <div className={styles.resultContainer}>
-          <PokemonCard
-            name={searchResult.name}
-            img={searchResult.img}
-            types={searchResult.types}
-          />
+          <h2>{searchResult.type === 'pokemon' ? 'Pokémon' : 
+               searchResult.type === 'egg-group' ? 'Egg Group' : 'Habitat'}: {searchTerm}</h2>
+          <div className={styles.pokemonGrid}>
+            {searchResult.result.map((pokemon) => (
+              <PokemonCard
+                key={pokemon.id}
+                name={pokemon.name}
+                img={pokemon.img}
+                types={pokemon.types}
+              />
+            ))}
+          </div>
         </div>
       )}
     </main>

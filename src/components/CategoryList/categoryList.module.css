@@ -1,0 +1,36 @@
+.categoryContainer {
+    padding: 20px;
+  }
+  
+  .categoryList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  
+  .categoryButton {
+    padding: 10px 20px;
+    background-color: #b0ccd5;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: capitalize;
+  }
+  
+  .categoryButton:hover {
+    background-color: #a8ebff;
+  }
+  
+  .categoryButton.selected {
+    background-color: #c391ec;
+    color: white;
+  }
+  
+  .pokemonGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    justify-items: center;
+  }
