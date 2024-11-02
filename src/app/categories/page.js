@@ -22,7 +22,7 @@ export default function Categories() {
       if (habitats.length === 0) await getHabitats();
     };
     fetchCategories();
-  }, []);
+  }, [eggGroups.length, habitats.length, getEggGroups, getHabitats]);
 
   const handleCategorySelect = async (categoryType, categoryName) => {
     await getPokemonByCategory(categoryType, categoryName);
