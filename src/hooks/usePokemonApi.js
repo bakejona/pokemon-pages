@@ -9,11 +9,39 @@ export function PokemonProvider({ children }) {
     randomPokemon: [],
   });
 
+  const [favorites, setFavorites] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const savedFavorites = localStorage.getItem('pokemonFavorites');
+      return savedFavorites ? JSON.parse(savedFavorites) : [];
+    }
+    return [];
+  });
+
   const [categories, setCategories] = useState({
     eggGroups: [],
     habitats: [],
     pokemonByCategory: {},
   });
+
+  // Favorites functions
+  const addToFavorites = (pokemon) => {
+    const newFavorites = [...favorites];
+    if (!newFavorites.some(fav => fav.id === pokemon.id)) {
+      newFavorites.push(pokemon);
+      setFavorites(newFavorites);
+      localStorage.setItem('pokemonFavorites', JSON.stringify(newFavorites));
+    }
+  };
+
+  const removeFromFavorites = (pokemonId) => {
+    const newFavorites = favorites.filter(pokemon => pokemon.id !== pokemonId);
+    setFavorites(newFavorites);
+    localStorage.setItem('pokemonFavorites', JSON.stringify(newFavorites));
+  };
+
+  const isFavorite = (pokemonId) => {
+    return favorites.some(pokemon => pokemon.id === pokemonId);
+  };
 
   async function getNumberOfPokemon() {
     const pokeResponse = await fetch(
@@ -22,7 +50,7 @@ export function PokemonProvider({ children }) {
     const { count: pokemonCount } = await pokeResponse.json();
     setPokemonState({ ...pokemonState, totalPokemonCount: pokemonCount });
   }
-
+  
   async function getRandomPokemon(limit = 5) {
     if (!pokemonState.totalPokemonCount) return [];
     const pokemonIds = {};
@@ -112,6 +140,23 @@ export function PokemonProvider({ children }) {
     }
   }
 
+  async function getAllPokemon(limit = 151) {
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}`);
+      const data = await response.json();
+      const pokemonList = await Promise.all(
+        data.results.map(async (pokemon) => {
+          const detailResponse = await fetch(pokemon.url);
+          return detailResponse.json();
+        })
+      );
+      return pokemonList.map(pokemon => getPokemonQuickInfo(pokemon));
+    } catch (error) {
+      console.error('Error fetching all pokemon:', error);
+      return [];
+    }
+  }
+
   async function getEggGroups() {
     try {
       const response = await fetch('https://pokeapi.co/api/v2/egg-group');
@@ -164,9 +209,40 @@ export function PokemonProvider({ children }) {
     }
   }
 
+  async function getPokemonDetails(id) {
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+      if (!response.ok) throw new Error('Pokemon not found');
+      const pokemonData = await response.json();
+      
+      // Get species data for additional information
+      const speciesResponse = await fetch(pokemonData.species.url);
+      const speciesData = await speciesResponse.json();
+      
+      return {
+        ...getPokemonQuickInfo(pokemonData),
+        height: pokemonData.height,
+        weight: pokemonData.weight,
+        abilities: pokemonData.abilities,
+        stats: pokemonData.stats,
+        flavor_text: speciesData.flavor_text_entries.find(entry => entry.language.name === 'en')?.flavor_text,
+        habitat: speciesData.habitat?.name,
+        generation: speciesData.generation?.name,
+        egg_groups: speciesData.egg_groups.map(group => group.name),
+      };
+    } catch (error) {
+      console.error('Error fetching pokemon details:', error);
+      return null;
+    }
+  }
+
   const pokemonValues = {
     ...pokemonState,
     ...categories,
+    favorites,
+    addToFavorites,
+    removeFromFavorites,
+    isFavorite,
     getNumberOfPokemon,
     getRandomPokemon,
     getPokemonQuickInfo,
@@ -174,6 +250,8 @@ export function PokemonProvider({ children }) {
     getEggGroups,
     getHabitats,
     getPokemonByCategory,
+    getPokemonDetails,
+    getAllPokemon,
   };
 
   return (

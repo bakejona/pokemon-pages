@@ -1,18 +1,40 @@
 .pokeCard {
-  height: 400px;
-  width: 300px;
-  background-color: #b0ccd5;
+  background-color: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.pokeCard:hover {
+  transform: translateY(-5px);
 }
 
 .pokeCard img {
-  height: calc(400px - 125px);
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  background-color: var(--light-blue);
 }
 
 .pokeCard div {
-  height: 125px;
-  background-color: #a8ebff;
+  padding: 15px;
 }
 
-.pokeCard div h4 {
-  font-size: 20px;
+.pokeCard h4 {
+  color: var(--primary-blue);
+  margin-bottom: 10px;
+}
+
+.pokeCard p {
+  color: var(--dark-gray);
+}
+
+.favoriteButton {
+  background-color: transparent;
+  color: var(--primary-yellow);
+  font-size: 24px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }

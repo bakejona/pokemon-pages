@@ -1,0 +1,29 @@
+.pokemonDetail {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .pokemonImage {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .info {
+    text-align: left;
+    margin-top: 20px;
+  }
+  
+  .info h2 {
+    margin-top: 20px;
+  }
+  
+  .info ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .info li {
+    margin-bottom: 5px;
+  }

@@ -1,20 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+:root {
+  --primary-blue: #3B4CCA;
+  --primary-red: #FF0000;
+  --primary-yellow: #FFDE00;
+  --secondary-blue: #3D7DCA;
+  --light-blue: #58ABF6;
+  --white: #FFFFFF;
+  --light-gray: #F5F5F5;
+  --dark-gray: #333333;
+}
+
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-html,
 body {
-  height: 100%;
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--light-gray);
+  color: var(--dark-gray);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  margin-bottom: 16px;
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--primary-blue);
+}
+
+a {
+  color: var(--secondary-blue);
+  text-decoration: none;
+}
+
+button {
+  background-color: var(--primary-red);
+  color: var(--white);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--secondary-blue);
 }

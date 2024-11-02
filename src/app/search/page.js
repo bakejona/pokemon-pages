@@ -1,53 +1,54 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import usePokemonApi from "@/hooks/usePokemonApi";
 import PokemonCard from "@/components/Pokemon/PokemonCard";
 import styles from './search.module.css';
 
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResult, setSearchResult] = useState(null);
-  const [error, setError] = useState('');
-  const { searchPokemon } = usePokemonApi();
+  const [searchResults, setSearchResults] = useState([]);
+  const [allPokemon, setAllPokemon] = useState([]);
+  const { searchPokemon, getAllPokemon } = usePokemonApi();
+
+  useEffect(() => {
+    const fetchAllPokemon = async () => {
+      const pokemonList = await getAllPokemon();
+      setAllPokemon(pokemonList);
+    };
+    fetchAllPokemon();
+  }, []);
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    setError('');
-    setSearchResult(null);
-    if (searchTerm.trim() === '') {
-      setError('Please enter a search term');
-      return;
-    }
-    const result = await searchPokemon(searchTerm);
-    if (result) {
-      setSearchResult(result);
+    if (searchTerm.trim()) {
+      const results = await searchPokemon(searchTerm);
+      setSearchResults(results ? results.result : []);
     } else {
-      setError('No results found');
+      setSearchResults([]);
     }
   };
 
   return (
-    <main className={styles.searchPage}>
-      <h1>Search for Pokémon, Egg Group, or Habitat</h1>
+    <div className={styles.searchPage}>
       <form onSubmit={handleSearch} className={styles.searchForm}>
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Enter Pokémon name, Egg Group, or Habitat"
+          placeholder="Enter Pokémon name or ID"
           className={styles.searchInput}
         />
         <button type="submit" className={styles.searchButton}>Search</button>
       </form>
-      {error && <p className={styles.error}>{error}</p>}
-      {searchResult && (
-        <div className={styles.resultContainer}>
-          <h2>{searchResult.type === 'pokemon' ? 'Pokémon' : 
-               searchResult.type === 'egg-group' ? 'Egg Group' : 'Habitat'}: {searchTerm}</h2>
+
+      {searchResults.length > 0 && (
+        <div className={styles.searchResults}>
+          <h2>Search Results</h2>
           <div className={styles.pokemonGrid}>
-            {searchResult.result.map((pokemon) => (
+            {searchResults.map((pokemon) => (
               <PokemonCard
                 key={pokemon.id}
+                id={pokemon.id}
                 name={pokemon.name}
                 img={pokemon.img}
                 types={pokemon.types}
@@ -56,6 +57,21 @@ export default function Search() {
           </div>
         </div>
       )}
-    </main>
+
+      <div className={styles.allPokemon}>
+        <h2>All Pokémon</h2>
+        <div className={styles.pokemonGrid}>
+          {allPokemon.map((pokemon) => (
+            <PokemonCard
+              key={pokemon.id}
+              id={pokemon.id}
+              name={pokemon.name}
+              img={pokemon.img}
+              types={pokemon.types}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }

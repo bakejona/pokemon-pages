@@ -21,6 +21,7 @@ export default function Home() {
     return (
       <PokemonCard
         key={`poke-card-${quickInfo.id}`}
+        id={quickInfo.id}
         name={quickInfo.name}
         img={quickInfo.img}
         types={quickInfo.types}
