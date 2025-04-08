@@ -30,9 +30,11 @@ export default function Home() {
   });
 
   return (
-    <main className={homeStyles.mainContent}>
-      <h1>POKEMON SHOWCASE</h1>
-      <section>{randomPokemonListJsx}</section>
-    </main>
+    <div className={homeStyles.container}>
+      <main className={homeStyles.mainContent}>
+        <h1>Featured PokéMon</h1>
+        <section>{randomPokemonListJsx}</section>
+      </main>
+    </div>
   );
 }

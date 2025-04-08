@@ -8,6 +8,9 @@ export default function Nav() {
   return (
     <nav>
       <ul className={navStyles.mainNav}>
+        <span>
+          PokéPortal!
+        </span>
         <li>
           <Link href="/">Home</Link>
         </li>

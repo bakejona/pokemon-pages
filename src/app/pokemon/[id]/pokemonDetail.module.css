@@ -1,29 +1,149 @@
 .pokemonDetail {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .pokemonImage {
-    width: 200px;
-    height: 200px;
-  }
-  
-  .info {
-    text-align: left;
-    margin-top: 20px;
-  }
-  
-  .info h2 {
-    margin-top: 20px;
-  }
-  
-  .info ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .info li {
-    margin-bottom: 5px;
-  }
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+}
+
+.pokemonImage {
+  width: 300px;
+  height: 300px;
+}
+
+.typeContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.typeBadge {
+  padding: 5px 10px;
+  border-radius: 20px;
+  text-transform: capitalize;
+  font-weight: bold;
+  color: #fff;
+}
+
+.fire {
+  background-color: #f08030;
+}
+
+.water {
+  background-color: #6890f0;
+}
+
+.grass {
+  background-color: #78c850;
+}
+
+.electric {
+  background-color: #f8d030;
+}
+
+.ice {
+  background-color: #98d8d8;
+}
+
+.fighting {
+  background-color: #c03028;
+}
+
+.poison {
+  background-color: #a040a0;
+}
+
+.ground {
+  background-color: #e0c068;
+}
+
+.flying {
+  background-color: #a890f0;
+}
+
+.psychic {
+  background-color: #f85888;
+}
+
+.bug {
+  background-color: #a8b820;
+}
+
+.rock {
+  background-color: #b8a038;
+}
+
+.ghost {
+  background-color: #705898;
+}
+
+.dragon {
+  background-color: #7038f8;
+}
+
+.dark {
+  background-color: #705848;
+}
+
+.steel {
+  background-color: #b8b8d0;
+}
+
+.fairy {
+  background-color: #f0b6bc;
+}
+
+.info {
+  text-align: left;
+  margin-top: 20px;
+}
+
+.info h2 {
+  margin-top: 20px;
+}
+
+.info ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.info li {
+  margin-bottom: 5px;
+}
+
+.statsList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.statBar {
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  height: 20px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.statFill {
+  background-color: #76c7c0;
+  height: 100%;
+  line-height: 20px;
+  color: white;
+  text-align: right;
+  padding-right: 5px;
+  border-radius: 5px;
+}
+
+.loading {
+  text-align: center;
+  font-size: 24px;
+  color: #333;
+}

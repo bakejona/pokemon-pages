@@ -1,4 +1,3 @@
-
 .mainNav {
   background-color: var(--primary-blue);
   padding: 15px 0;
@@ -44,5 +43,15 @@
 
 .mainNav li a:hover::after {
   width: 100%;
+}
+
+.mainNav span {
+  font-size: 30px;
+  font-weight: bold;
+  font-family: 'Pokemon Solid', sans-serif;
+  color: white;
+  letter-spacing: 3px;
+
+
 }
 

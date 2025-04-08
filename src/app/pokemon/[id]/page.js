@@ -16,7 +16,7 @@ export default function PokemonDetail() {
         const data = await response.json();
         setPokemon(data);
       } catch (error) {
-        console.error('Error fetching pokemon data:', error);
+        console.error('Error fetching Pokémon data:', error);
       }
     };
 
@@ -24,31 +24,51 @@ export default function PokemonDetail() {
   }, [id]);
 
   if (!pokemon) {
-    return <div>Loading...</div>;
+    return <div className={styles.loading}>Loading...</div>;
   }
 
   const { name, img, types } = getPokemonQuickInfo(pokemon);
 
   return (
     <div className={styles.pokemonDetail}>
-      <h1>{name.charAt(0).toUpperCase() + name.slice(1)}</h1>
-      <img src={img} alt={name} className={styles.pokemonImage} />
-      <div className={styles.info}>
-        <p><strong>Types:</strong> {types.map(t => t.type.name).join(', ')}</p>
-        <p><strong>Height:</strong> {pokemon.height / 10} m</p>
-        <p><strong>Weight:</strong> {pokemon.weight / 10} kg</p>
-        <h2>Abilities:</h2>
-        <ul>
-          {pokemon.abilities.map((ability, index) => (
-            <li key={index}>{ability.ability.name}</li>
+      <div className={styles.card}>
+        <h1>{name.charAt(0).toUpperCase() + name.slice(1)}</h1>
+        <img src={img} alt={name} className={styles.pokemonImage} />
+        <div className={styles.typeContainer}>
+          {types.map((t) => (
+            <span key={t.type.name} className={`${styles.typeBadge} ${styles[t.type.name]}`}>
+              {t.type.name}
+            </span>
           ))}
-        </ul>
-        <h2>Stats:</h2>
-        <ul>
-          {pokemon.stats.map((stat, index) => (
-            <li key={index}>{stat.stat.name}: {stat.base_stat}</li>
-          ))}
-        </ul>
+        </div>
+        <div className={styles.info}>
+          <p><strong>Height:</strong> {pokemon.height / 10} m</p>
+          <p><strong>Weight:</strong> {pokemon.weight / 10} kg</p>
+
+          <h2>Abilities</h2>
+          <ul>
+            {pokemon.abilities.map((ability, index) => (
+              <li key={index}>{ability.ability.name}</li>
+            ))}
+          </ul>
+
+          <h2>Stats</h2>
+          <ul className={styles.statsList}>
+            {pokemon.stats.map((stat, index) => (
+              <li key={index}>
+                <span>{stat.stat.name}</span>
+                <div className={styles.statBar}>
+                  <div
+                    className={styles.statFill}
+                    style={{ width: `${stat.base_stat > 100 ? 100 : stat.base_stat}%` }}
+                  >
+                    {stat.base_stat}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

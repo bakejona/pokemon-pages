@@ -14,35 +14,22 @@ export default function PokemonCard({ id, img = "", name = "", types = [] }) {
     };
 
     checkFavoriteStatus();
-    
     window.addEventListener('storage', checkFavoriteStatus);
-    
     return () => {
       window.removeEventListener('storage', checkFavoriteStatus);
     };
   }, [id]);
 
-  const typesJsx = types
-    .map(function (typeObj) {
-      return typeObj.type.name;
-    })
-    .join(", ");
-
   const handleFavoriteClick = (e) => {
     e.preventDefault(); 
     const favorites = JSON.parse(localStorage.getItem('pokemonFavorites') || '[]');
-    
+
     if (isFavorited) {
       const newFavorites = favorites.filter(pokemon => pokemon.id !== id);
       localStorage.setItem('pokemonFavorites', JSON.stringify(newFavorites));
       setIsFavorited(false);
     } else {
-      const newFavorite = {
-        id,
-        name,
-        img,
-        types
-      };
+      const newFavorite = { id, name, img, types };
       const newFavorites = [...favorites, newFavorite];
       localStorage.setItem('pokemonFavorites', JSON.stringify(newFavorites));
       setIsFavorited(true);
@@ -56,9 +43,19 @@ export default function PokemonCard({ id, img = "", name = "", types = [] }) {
       <img src={img} alt={name} />
       <div>
         <h4>{name}</h4>
-        <p>
-          <span>{typesJsx}</span>
-        </p>
+        <div className={pokemonStyles.typesWrapper}>
+          {types.map((typeObj) => {
+            const typeName = typeObj.type.name;
+            return (
+              <span
+                key={typeName}
+                className={`${pokemonStyles.typeBadge} ${pokemonStyles[typeName]}`}
+              >
+                {typeName}
+              </span>
+            );
+          })}
+        </div>
         <button 
           onClick={handleFavoriteClick}
           className={`${pokemonStyles.favoriteButton} ${isFavorited ? pokemonStyles.favorited : ''}`}
