@@ -1,15 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 :root {
-  --primary-blue: #3B4CCA;
-  --primary-red: #FF0000;
-  --primary-yellow: #FFDE00;
-  --secondary-blue: #3D7DCA;
-  --light-blue: #58ABF6;
-  --white: #FFFFFF;
-  --light-gray: #F5F5F5;
-  --dark-gray: #333333;
+  --primary-blue: #3b4cca; /* Pokémon Blue */
+  --primary-yellow: #ffcc00; /* Pikachu Yellow */
+  --white: #ffffff;
+  --hover-red: #ff0000;
 }
+
 
 * {
   box-sizing: border-box;

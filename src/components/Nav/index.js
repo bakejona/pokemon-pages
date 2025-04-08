@@ -9,13 +9,13 @@ export default function Nav() {
     <nav>
       <ul className={navStyles.mainNav}>
         <li>
-          <Link href="/">HOME</Link>
+          <Link href="/">Home</Link>
         </li>
         <li>
-          <Link href="/search">SEARCH</Link>
+          <Link href="/search">Pokedex</Link>
         </li>
         <li>
-          <Link href="/favorites">FAVORITES</Link>
+          <Link href="/favorites">Favorites</Link>
         </li>
       </ul>
     </nav>

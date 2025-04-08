@@ -59,7 +59,7 @@ export default function Search() {
       )}
 
       <div className={styles.allPokemon}>
-        <h2>All Pokémon</h2>
+        <h2>Original 151 Pokémon</h2>
         <div className={styles.pokemonGrid}>
           {allPokemon.map((pokemon) => (
             <PokemonCard
